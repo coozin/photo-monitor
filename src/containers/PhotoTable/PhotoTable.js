@@ -7,17 +7,19 @@ import { connect } from 'react-redux';
 import { thunk_action_creator, details_action_creator } from "../../actions";
 
 // Material UI
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+// import Table from '@material-ui/core/Table';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableContainer from '@material-ui/core/TableContainer';
+// import TableHead from '@material-ui/core/TableHead';
+// import TableRow from '@material-ui/core/TableRow';
+// import Paper from '@material-ui/core/Paper';
+
+import MaterialTable from 'material-table';
 
 // Constants
 const CATEGORIES = ['real estate', 'events', 'food', 'other'];
-const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+// const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 class PhotoTable extends Component {
   constructor(props) {
@@ -165,7 +167,47 @@ class PhotoTable extends Component {
     console.log('rows (final)', rows)
 
     return (
-      <TableContainer component={Paper}>
+      <div style={{ maxWidth: '100%' }}>
+        <MaterialTable
+          columns={[
+            { title: 'Client Market', field: 'category' },
+            { title: 'Monday', field: 'monday', type: 'numeric' },
+            { title: 'Tuesday', field: 'tuesday', type: 'numeric' },
+            { title: 'Wednesday', field: 'wednesday', type: 'numeric' },
+            { title: 'Thursday', field: 'thursday', type: 'numeric' },
+            { title: 'Friday', field: 'friday', type: 'numeric' },
+            { title: 'Saturday', field: 'saturday', type: 'numeric' },
+            { title: 'Sunday', field: 'sunday', type: 'numeric' },
+          ]}
+          data={rows}
+          title="Photoshoots"
+          detailPanel={rowData => {
+            // this would show all photoshoots by client for this market
+            console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
+            return (
+              <MaterialTable
+                columns={[
+                  { title: 'Title', field: 'title' },
+                  { title: 'Day', field: 'day_of_the_week' },
+                  { title: 'Client ID', field: 'client_id', type: 'numeric' },
+                  { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+                  { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+                  { title: 'Country', field: 'country' },
+                  { title: 'Package', field: 'package' },
+                ]}
+                data={rowData.photoshoots}
+              />
+            )
+          }}
+          onRowClick={(event, rowData, togglePanel) => togglePanel()}
+        />
+      </div>
+    );
+  }
+}
+
+/* 
+<TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -228,9 +270,8 @@ class PhotoTable extends Component {
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  }
-}
+
+*/
 
 function mapStateToProps(state) {
   const { photos, photoshoot_details } = state.photos
