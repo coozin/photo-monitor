@@ -119,7 +119,6 @@ class PhotoTable extends Component {
       },
     }
 
-
     for (let i = 0; i < photos.length; i++) {
       for (let j = 0; j < details.length; j++) {
         if (photos[i].photoshoot_id === details[j].id) {
@@ -181,97 +180,64 @@ class PhotoTable extends Component {
           ]}
           data={rows}
           title="Photoshoots"
-          detailPanel={rowData => {
-            // this would show all photoshoots by client for this market
-            console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
-            return (
-              <MaterialTable
-                columns={[
-                  { title: 'Title', field: 'title' },
-                  { title: 'Day', field: 'day_of_the_week' },
-                  { title: 'Client ID', field: 'client_id', type: 'numeric' },
-                  { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
-                  { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
-                  { title: 'Country', field: 'country' },
-                  { title: 'Package', field: 'package' },
-                ]}
-                data={rowData.photoshoots}
-              />
-            )
-          }}
+          detailPanel={[
+            {
+              // icon: 'calendar',
+              tooltip: "Show Category Data",
+              render: rowData => {
+                // this would show all photoshoots by client for this market
+                console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
+                return (
+                  <MaterialTable
+                    columns={[
+                      { title: 'Title', field: 'title' },
+                      { title: 'Day', field: 'day_of_the_week' },
+                      { title: 'Client ID', field: 'client_id', type: 'numeric' },
+                      { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+                      { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+                      { title: 'Country', field: 'country' },
+                      { title: 'Package', field: 'package' },
+                    ]}
+                    data={rowData.photoshoots}
+                    options={{
+                      search: false,
+                      sorting: false,
+                      paging: false,
+                    }}
+                    title="Category Details"
+                  />
+                )
+              }
+            },
+            // {
+            //   icon: 'calendar',
+            //   'tooltip': "Show Day Data",
+            //   render: rowData => {
+            //     // this would show all photoshoots by client for this market
+            //     console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
+            //     return (
+            //       <MaterialTable
+            //         columns={[
+            //           { title: 'Title', field: 'title' },
+            //           { title: 'Category', field: 'type' },
+            //           { title: 'Client ID', field: 'client_id', type: 'numeric' },
+            //           { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+            //           { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+            //           { title: 'Country', field: 'country' },
+            //           { title: 'Package', field: 'package' },
+            //         ]}
+            //         data={rowData.photoshoots}
+            //       />
+            //     )
+            //   }
+            // }
+          ]}
           onRowClick={(event, rowData, togglePanel) => togglePanel()}
         />
       </div>
     );
   }
 }
-
-/* 
-<TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Client Market</TableCell>
-              <TableCell>MONDAY</TableCell>
-              <TableCell>TUESDAY</TableCell>
-              <TableCell>WEDNESDAY</TableCell>
-              <TableCell>THURSDAY</TableCell>
-              <TableCell>FRIDAY</TableCell>
-              <TableCell>SATURDAY</TableCell>
-              <TableCell>SUNDAY</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.category}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                >
-                  {row.category}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.monday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.tuesday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.wednesday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.thursday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.friday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.saturday}
-                </TableCell>
-                <TableCell
-                  align="right"
-                >
-                  {row.sunday}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-*/
 
 function mapStateToProps(state) {
   const { photos, photoshoot_details } = state.photos
