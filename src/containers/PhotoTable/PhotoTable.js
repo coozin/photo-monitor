@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import './PhotoTable.css';
 
 // Actions
-// import { getPhotos } from '../../actions';
 import {
   thunk_action_creator,
   details_action_creator
 } from "../../actions";
 
-// Material UI
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-
 // Libraries
 import MaterialTable from 'material-table';
 
+// Local containers
+import DialogDetails from '../DialogDetails/DialogDetails';
+
 // Constants
-const CATEGORIES = ['real estate', 'events', 'food', 'other'];
-// const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+import {
+  CATEGORIES,
+} from '../../utilities/schemas';
 
 class PhotoTable extends Component {
   constructor(props) {
@@ -88,6 +85,7 @@ class PhotoTable extends Component {
 
   combineDetails(photos, details) {
     let combinedDetails = [];
+
     let rows = {
       'real estate': {
         category: 'real estate',
@@ -100,8 +98,8 @@ class PhotoTable extends Component {
         saturday: 0,
         sunday: 0,
       },
-      'events': {
-        category: 'events',
+      'event': {
+        category: 'event',
         photoshoots: [],
         monday: 0,
         tuesday: 0,
@@ -147,12 +145,9 @@ class PhotoTable extends Component {
     }
     console.log("combinedDetails to be processed", combinedDetails)
     for (let i = 0; i < combinedDetails.length; i++) {
-      for (let j = 0; j < CATEGORIES.length; j++) {
-        if (combinedDetails[i].type.toLowerCase() === CATEGORIES[j]) {
-          rows[CATEGORIES[j]].photoshoots.push(combinedDetails[i]);
-          rows[CATEGORIES[j]][`${combinedDetails[i].day_of_the_week.toLowerCase()}`] += combinedDetails[i].number_of_photos;
-        }
-      }
+      let localCategory = combinedDetails[i].type.toLowerCase();
+      rows[localCategory].photoshoots.push(combinedDetails[i]);
+      rows[localCategory][`${combinedDetails[i].day_of_the_week.toLowerCase()}`] += combinedDetails[i].number_of_photos;
     }
     return rows;
   }
@@ -297,8 +292,8 @@ class PhotoTable extends Component {
                     ]}
                     data={rowData.photoshoots}
                     options={{
-                      search: false,
-                      sorting: false,
+                      search: true,
+                      sorting: true,
                       paging: false,
                     }}
                     title={`${rowData.category} details`}
@@ -309,36 +304,12 @@ class PhotoTable extends Component {
           ]}
         />
         {showDialog &&
-          <Dialog
-            open={showDialog}
-            // maxWidth="md"
-            fullScreen
-          >
-            <MaterialTable
-              columns={[
-                { title: 'Title', field: 'title' },
-                { title: 'Day', field: 'day_of_the_week' },
-                { title: 'Client ID', field: 'client_id', type: 'numeric' },
-                { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
-                { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
-                { title: 'Country', field: 'country' },
-                { title: 'Package', field: 'package' },
-              ]}
-              data={dialogPhotohoots}
-              options={{
-                search: false,
-                sorting: false,
-                paging: false,
-                title: false
-              }}
-              title={dialogTitle}
-            />
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <DialogDetails
+            showDialog={showDialog}
+            dialogPhotohoots={dialogPhotohoots}
+            dialogTitle={dialogTitle}
+            handleClose={this.handleClose}
+          />
         }
       </div>
     );

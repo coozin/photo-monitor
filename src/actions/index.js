@@ -46,7 +46,7 @@ export const getPhotoshootErr = err => {
 export const thunk_action_creator = () => {
   return function (dispatch) {
     dispatch(startGetPhotos());
-    const request = axios.get('https://frontend-test-api-server.herokuapp.com/photoshoots_daily/')
+    const request = axios.get('https://frontend-test-api-server.herokuapp.com/photoshoots_daily/?limit=100')
     return request.then(
       response => dispatch(getPhotos(response.data)),
       err => dispatch(getPhotosErr(err.data))
