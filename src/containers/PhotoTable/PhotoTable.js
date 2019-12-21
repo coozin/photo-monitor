@@ -5,13 +5,14 @@ import './PhotoTable.css';
 
 // Actions
 // import { getPhotos } from '../../actions';
-import { thunk_action_creator, details_action_creator } from "../../actions";
+import {
+  thunk_action_creator,
+  details_action_creator
+} from "../../actions";
 
 // Material UI
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 
 // Libraries
@@ -28,10 +29,6 @@ class PhotoTable extends Component {
       details: [],
       showDialog: false,
     };
-  }
-
-  createData(market, monday, tuesday, wednesday, thursday, friday, saturday, sunday) {
-    return { market, monday, tuesday, wednesday, thursday, friday, saturday, sunday };
   }
 
   componentDidMount() {
@@ -161,8 +158,15 @@ class PhotoTable extends Component {
   }
 
   render() {
-    const { details, showDialog, dialogTitle, dialogPhotohoots } = this.state;
-    const { photos } = this.props;
+    const {
+      details,
+      showDialog,
+      dialogTitle,
+      dialogPhotohoots
+    } = this.state;
+    const {
+      photos
+    } = this.props;
 
     console.log('details in render', details)
 
@@ -177,13 +181,6 @@ class PhotoTable extends Component {
     }
 
     console.log("fullData", fullData)
-
-    // just a placeholder
-    // let photoshootDialogRows = [];
-
-    // for (let i = 0; i < dialogPhotohoots.length; i++) {
-
-    // }
 
     return (
       <div style={{ maxWidth: '100%' }}>
@@ -277,6 +274,9 @@ class PhotoTable extends Component {
           ]}
           data={rows}
           title="Photoshoots type breakdown"
+          options={{
+            paging: false,
+          }}
           detailPanel={[
             {
               // icon: 'calendar',
@@ -301,7 +301,7 @@ class PhotoTable extends Component {
                       sorting: false,
                       paging: false,
                     }}
-                    title="Category Details"
+                    title={`${rowData.category} details`}
                   />
                 )
               }
@@ -311,31 +311,28 @@ class PhotoTable extends Component {
         {showDialog &&
           <Dialog
             open={showDialog}
+            // maxWidth="md"
+            fullScreen
           >
-            <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
-              {dialogTitle}
-            </DialogTitle>
-            <DialogContent dividers>
-              <MaterialTable
-                columns={[
-                  { title: 'Title', field: 'title' },
-                  { title: 'Day', field: 'day_of_the_week' },
-                  { title: 'Client ID', field: 'client_id', type: 'numeric' },
-                  { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
-                  { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
-                  { title: 'Country', field: 'country' },
-                  { title: 'Package', field: 'package' },
-                ]}
-                data={dialogPhotohoots}
-                options={{
-                  search: false,
-                  sorting: false,
-                  paging: false,
-                  title: false
-                }}
-              // title={dialogTitle}
-              />
-            </DialogContent>
+            <MaterialTable
+              columns={[
+                { title: 'Title', field: 'title' },
+                { title: 'Day', field: 'day_of_the_week' },
+                { title: 'Client ID', field: 'client_id', type: 'numeric' },
+                { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+                { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+                { title: 'Country', field: 'country' },
+                { title: 'Package', field: 'package' },
+              ]}
+              data={dialogPhotohoots}
+              options={{
+                search: false,
+                sorting: false,
+                paging: false,
+                title: false
+              }}
+              title={dialogTitle}
+            />
             <DialogActions>
               <Button onClick={this.handleClose} color="primary">
                 Close
