@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
+import './PhotoTable.css';
 
 // Actions
 // import { getPhotos } from '../../actions';
 import { thunk_action_creator, details_action_creator } from "../../actions";
 
 // Material UI
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
-// import TableHead from '@material-ui/core/TableHead';
-// import TableRow from '@material-ui/core/TableRow';
-// import Paper from '@material-ui/core/Paper';
+import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
+// Libraries
 import MaterialTable from 'material-table';
 
 // Constants
@@ -26,6 +26,7 @@ class PhotoTable extends Component {
     super(props);
     this.state = {
       details: [],
+      showDialog: false,
     };
   }
 
@@ -67,6 +68,24 @@ class PhotoTable extends Component {
         ...this.state.details,
         details
       ]
+    })
+  }
+
+  showDayBreakdown(day, type, photohoots) {
+    console.log("showDayBreakdown day", day)
+    console.log("showDayBreakdown type", type)
+    console.log("showDayBreakdown photohoots", photohoots)
+
+    this.setState({
+      showDialog: true,
+      dialogTitle: `${day} - ${type}`,
+      dialogPhotohoots: photohoots.filter(photo => photo.day_of_the_week.toLowerCase() === day),
+    })
+  }
+
+  handleClose = () => {
+    this.setState({
+      showDialog: false,
     })
   }
 
@@ -134,7 +153,7 @@ class PhotoTable extends Component {
       for (let j = 0; j < CATEGORIES.length; j++) {
         if (combinedDetails[i].type.toLowerCase() === CATEGORIES[j]) {
           rows[CATEGORIES[j]].photoshoots.push(combinedDetails[i]);
-          rows[CATEGORIES[j]][`${combinedDetails[i].day_of_the_week.toLowerCase()}`] += combinedDetails[i].number_of_photos
+          rows[CATEGORIES[j]][`${combinedDetails[i].day_of_the_week.toLowerCase()}`] += combinedDetails[i].number_of_photos;
         }
       }
     }
@@ -142,7 +161,7 @@ class PhotoTable extends Component {
   }
 
   render() {
-    const { details } = this.state;
+    const { details, showDialog, dialogTitle, dialogPhotohoots } = this.state;
     const { photos } = this.props;
 
     console.log('details in render', details)
@@ -159,27 +178,105 @@ class PhotoTable extends Component {
 
     console.log("fullData", fullData)
 
-    // [
-    //   this.createData('Real estate', 100, 100, 100, 100, 100, 100, 100),
-    // ];
+    // just a placeholder
+    // let photoshootDialogRows = [];
 
-    console.log('rows (final)', rows)
+    // for (let i = 0; i < dialogPhotohoots.length; i++) {
+
+    // }
 
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
           columns={[
             { title: 'Client Market', field: 'category' },
-            { title: 'Monday', field: 'monday', type: 'numeric' },
-            { title: 'Tuesday', field: 'tuesday', type: 'numeric' },
-            { title: 'Wednesday', field: 'wednesday', type: 'numeric' },
-            { title: 'Thursday', field: 'thursday', type: 'numeric' },
-            { title: 'Friday', field: 'friday', type: 'numeric' },
-            { title: 'Saturday', field: 'saturday', type: 'numeric' },
-            { title: 'Sunday', field: 'sunday', type: 'numeric' },
+            {
+              title: 'Monday',
+              field: 'monday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("monday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.monday}
+                </div>
+            },
+            {
+              title: 'Tuesday',
+              field: 'tuesday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("tuesday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.tuesday}
+                </div>
+            },
+            {
+              title: 'Wednesday',
+              field: 'wednesday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("wednesday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.wednesday}
+                </div>
+            },
+            {
+              title: 'Thursday',
+              field: 'thursday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("thursday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.thursday}
+                </div>
+            },
+            {
+              title: 'Friday',
+              field: 'friday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("friday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.friday}
+                </div>
+            },
+            {
+              title: 'Saturday',
+              field: 'saturday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("saturday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.saturday}
+                </div>
+            },
+            {
+              title: 'Sunday',
+              field: 'sunday',
+              type: 'numeric',
+              render: rowData =>
+                <div
+                  className="cell"
+                  onClick={() => this.showDayBreakdown("sunday", rowData.category, rowData.photoshoots)}
+                >
+                  {rowData.sunday}
+                </div>
+            },
           ]}
           data={rows}
-          title="Photoshoots"
+          title="Photoshoots type breakdown"
           detailPanel={[
             {
               // icon: 'calendar',
@@ -209,31 +306,43 @@ class PhotoTable extends Component {
                 )
               }
             },
-            // {
-            //   icon: 'calendar',
-            //   'tooltip': "Show Day Data",
-            //   render: rowData => {
-            //     // this would show all photoshoots by client for this market
-            //     console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
-            //     return (
-            //       <MaterialTable
-            //         columns={[
-            //           { title: 'Title', field: 'title' },
-            //           { title: 'Category', field: 'type' },
-            //           { title: 'Client ID', field: 'client_id', type: 'numeric' },
-            //           { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
-            //           { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
-            //           { title: 'Country', field: 'country' },
-            //           { title: 'Package', field: 'package' },
-            //         ]}
-            //         data={rowData.photoshoots}
-            //       />
-            //     )
-            //   }
-            // }
           ]}
-          onRowClick={(event, rowData, togglePanel) => togglePanel()}
         />
+        {showDialog &&
+          <Dialog
+            open={showDialog}
+          >
+            <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
+              {dialogTitle}
+            </DialogTitle>
+            <DialogContent dividers>
+              <MaterialTable
+                columns={[
+                  { title: 'Title', field: 'title' },
+                  { title: 'Day', field: 'day_of_the_week' },
+                  { title: 'Client ID', field: 'client_id', type: 'numeric' },
+                  { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+                  { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+                  { title: 'Country', field: 'country' },
+                  { title: 'Package', field: 'package' },
+                ]}
+                data={dialogPhotohoots}
+                options={{
+                  search: false,
+                  sorting: false,
+                  paging: false,
+                  title: false
+                }}
+              // title={dialogTitle}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        }
       </div>
     );
   }
