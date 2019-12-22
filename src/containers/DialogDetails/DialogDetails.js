@@ -16,11 +16,12 @@ class DialogDetails extends Component {
       dialogTitle,
       handleClose,
     } = this.props;
+    console.log("DialogDetails props", this.props)
     return (
       <Dialog
         open={showDialog}
-        // maxWidth="md"
         fullScreen
+        data-testid="dialog"
       >
         <MaterialTable
           columns={[
@@ -40,6 +41,7 @@ class DialogDetails extends Component {
             title: false
           }}
           title={dialogTitle}
+
         />
         <DialogActions>
           <Button onClick={handleClose} color="primary">

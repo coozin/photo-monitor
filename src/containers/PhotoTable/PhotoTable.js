@@ -281,6 +281,7 @@ class PhotoTable extends Component {
                 console.log("rowData.photoshoots detailPanel", rowData.photoshoots)
                 return (
                   <MaterialTable
+                    id={`${rowData.category}-id`}
                     columns={[
                       { title: 'Title', field: 'title' },
                       { title: 'Day', field: 'day_of_the_week' },
