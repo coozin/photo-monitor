@@ -41,7 +41,6 @@ class DialogDetails extends Component {
             title: false
           }}
           title={dialogTitle}
-
         />
         <DialogActions>
           <Button onClick={handleClose} color="primary">

@@ -1,11 +1,12 @@
 import React from 'react';
-import DialogDetails from './DialogDetails';
-
 import { render, fireEvent, screen, wait } from '@testing-library/react';
 
+// Libraries
+import MaterialTable from 'material-table';
+
 test('show dialog', async () => {
-  const handleClose = jest.fn();
-  const showDialog = true;
+  const dialogTitle = "Test Title";
+
   const dialogPhotohoots = [
     {
       id: 14,
@@ -19,18 +20,34 @@ test('show dialog', async () => {
       package: "XS",
     }
   ];
-  const dialogTitle = "Title";
-  const { getByRole } = render(<DialogDetails open={showDialog} dialogPhotohoot={dialogPhotohoots} handleClose={handleClose} dialogTitle={dialogTitle} />);
-  // const content = queryByText("monday");
-  // expect(content).toBeNull();
 
-  const closeButton = await wait(() => getByRole("Dialog"))
+  render(
+    <MaterialTable
+      columns={[
+        { title: 'Title', field: 'title' },
+        { title: 'Day', field: 'day_of_the_week' },
+        { title: 'Client ID', field: 'client_id', type: 'numeric' },
+        { title: 'Photoshoot #', field: 'photoshoot_id', type: 'numeric' },
+        { title: 'Photo Count', field: 'number_of_photos', type: 'numeric' },
+        { title: 'Country', field: 'country' },
+        { title: 'Package', field: 'package' },
+      ]}
+      data={dialogPhotohoots}
+      options={{
+        search: true,
+        sorting: true,
+        paging: false,
+        title: false
+      }}
+      title={dialogTitle}
+    />
+  );
 
-  fireEvent.click(closeButton)
-  expect(handleClose).toHaveBeenCalledTimes(1)
+  let renderedContent = null;
 
-  // const handleClose = jest.fn()
-  // const { getByText } = render(<button onClick={handleClose}>Close</button>)
-  // fireEvent.click(getByText(/Close/i))
-  // expect(handleClose).toHaveBeenCalledTimes(1)
+  await wait(() => renderedContent = screen.getByText(/monday/i), { timeout: 1000, interval: 100 })
+
+  // console.log("renderedTitle", renderedTitle)
+
+  expect(renderedContent).not.toBeNull()
 });

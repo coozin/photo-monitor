@@ -6,7 +6,9 @@ import PhotoTable from './containers/PhotoTable/PhotoTable';
 
 function App() {
   return (
-    <PhotoTable />
+    <div className="App">
+      <PhotoTable />
+    </div>
   );
 }
 
